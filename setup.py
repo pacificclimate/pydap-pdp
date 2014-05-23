@@ -31,7 +31,7 @@ testing_extras = tests_require + [
 ]
 
 
-setup(name='Pydap',
+setup(name='pydap_pdp',
     version=__version__,
     description="An implementation of the Data Access Protocol.",
     long_description=README + '\n\n' + NEWS,
