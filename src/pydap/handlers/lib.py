@@ -6,6 +6,7 @@ import operator
 import itertools
 import ast
 from logging import debug
+from copy import copy
 
 import numpy as np
 from webob import Request
@@ -55,7 +56,7 @@ class BaseHandler(object):
 
     def __init__(self, dataset=None):
         self.dataset = dataset
-        self.additional_headers = NYAN
+        self.additional_headers = copy(NYAN)
 
     def __call__(self, environ, start_response):
         req = Request(environ)
