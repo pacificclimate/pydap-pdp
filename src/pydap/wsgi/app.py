@@ -74,12 +74,12 @@ class DapServer(object):
             for handler in self.config['handlers']:
                 url = '/' + handler['url'].lstrip('/')
                 pattern = re.escape(url) # FIXME: slash and hack
-                if re.search(pattern, req.path_info):
+                if re.search(pattern, req.path):
                     try:
                         if 'file' in handler:
                             res = get_handler(handler['file'])
                         elif 'dir' in handler:
-                            path = req.path[len(handler['url'].rstrip('/'))+1:].rsplit('.', 1)[0]
+                            path = req.path_info.lstrip('/').rsplit('.', 1)[0]
                             filepath = os.path.join(handler['dir'], path)
                             res = get_handler(filepath)
                     except OpenFileError, e:
@@ -102,7 +102,7 @@ class DapServer(object):
             elif 'dir' in handler:
                 for root, dirs, files in os.walk(handler['dir']):
                     for filename in files:
-                        yield app.url + handler['url'] + os.path.abspath(os.path.join(root, filename))[len(handler['dir']):]
+                        yield app_url + handler['url'] + os.path.abspath(os.path.join(root, filename))[len(handler['dir']):]
 
 
 def main():
