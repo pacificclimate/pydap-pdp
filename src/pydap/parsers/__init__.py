@@ -71,29 +71,54 @@ def parse_ce(query_string):
 
 def parse_hyperslab(hyperslab):
     """
-    Parse a hyperslab into a Python tuple of slices.
+    Parse a hyperslab into a Python tuple of slice objects.
+    OpenDAP subsetting indices are different than NumPy's,
+    See https://goo.gl/swVCdN
 
+    >>> parse_hyperslab("[36]")
+    (slice(36, 37, None))
+    >>> parse_hyperslab("[1:2]")
+    (slice(1, 3, None))
+    >>> parse_hyperslab("[1:2:6][][3:5:]")
+    (slice(1, 7, 2), slice(None, None, None), slice(3, None, 5))
     """
-    exprs = [expr for expr in hyperslab[1:-1].split('][') if expr]
 
-    out = []
-    for expr in exprs:
-        tokens = map(int, expr.split(':'))
-        start = tokens[0]
-        step = 1
+    dimensions = []
+    slices = []
+    to_split = hyperslab
+
+    while to_split:
+        rbracket = to_split.find(']') + 1
+        dimensions.append(to_split[:rbracket])
+        to_split = to_split[rbracket:]
+
+    for dim in dimensions:
+        dim = dim.strip("[]")
+        tokens = dim.split(":")
+
+        start = stop = step = None
 
         if len(tokens) == 1:
-            stop = start + 1
+            #no colon in this chunk
+            #so either the original dimension was [], indicating a full slice,
+            #(in which case start, stop, and step should all be None)
+            #or a number like [57], indicating a single index
+            if tokens[0]:
+                start = int(tokens[0])
+                stop = start + 1
         elif len(tokens) == 2:
-            stop = tokens[1] + 1
+            #either [start :] or [start:last]
+            start = int(tokens[0])
+            stop = int(tokens[1]) + 1 if tokens[1] else None
         elif len(tokens) == 3:
-            step = tokens[1]
-            stop = tokens[2] + 1
+            #either [start: step :] or [start : step : last]
+            start = int(tokens[0])
+            step = int(tokens[1])
+            stop = int(tokens[2]) + 1 if tokens[2] else None
 
-        out.append(slice(start, stop, step))
+        slices.append(slice(start, stop, step))
 
-    return tuple(out)
-
+    return tuple(slices)
 
 class SimpleParser(object):
     """
