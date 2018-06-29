@@ -56,7 +56,7 @@ class BaseHandler(object):
 
     def __init__(self, dataset=None):
         self.dataset = dataset
-        self.additional_headers = copy(NYAN)
+        self.additional_headers = []
 
     def __call__(self, environ, start_response):
         req = Request(environ)
@@ -82,7 +82,7 @@ class BaseHandler(object):
         except HTTPException, exc:
             # HTTP exceptions are used to redirect the user
             return exc(environ, start_response)
-        except:
+        except Exception as e:
             # should the exception be catched?
             # http://wsgi.readthedocs.org/en/latest/specifications/throw_errors.html
             if environ.get('x-wsgiorg.throw_errors'):
@@ -386,22 +386,3 @@ def build_filter(selection, cols):
         filters.append(filter_)                                                 
                                                                                 
     return lambda line: reduce(lambda x, y: x and y, [f(line) for f in filters])
-
-
-NYAN = [
-    ('X-Nyan-00', ' [m+      o     +              o            '),
-    ('X-Nyan-01', ' [m    +             o     +       +        '),
-    ('X-Nyan-02', ' [mo          +                             '),
-    ('X-Nyan-03', ' [m    o  +           +        +            '),
-    ('X-Nyan-04', ' [m+        o     o       +        o        '),
-    ('X-Nyan-05', ' [1;31m_-_-_-_-_-_-_-[m,------,      o    '),
-    ('X-Nyan-06', ' [1;33m-_-_-_-_-_-_-_[m|   /\_/\          '),
-    ('X-Nyan-07', ' [1;32m_-_-_-_-_-_-_[m~|__( ^ .^)  +     +'),
-    ('X-Nyan-08', ' [1;34m-_-_-_-_-_-_-_[m""  ""             '),
-    ('X-Nyan-09', ' [m+      o         o   +       o           '),
-    ('X-Nyan-10', ' [m    +         +                          '),
-    ('X-Nyan-11', ' [mo        o         o      o     +        '),
-    ('X-Nyan-12', ' [m    o           +                        '),
-    ('X-Nyan-13', ' [m+      +     o        o      +           '),
-    ('X-Nyan-Credit', ' Chairman Jonty <jonty@nyan.cat.idea>'),
-]
