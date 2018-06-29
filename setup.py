@@ -6,7 +6,7 @@ README = open(os.path.join(here, 'README.rst')).read()
 NEWS = open(os.path.join(here, 'NEWS.txt')).read()
 
 
-__version__ = '3.2.5'
+__version__ = '3.2.6'
 
 install_requires = [
     'Numpy',
