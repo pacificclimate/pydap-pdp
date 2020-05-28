@@ -79,7 +79,7 @@ class BaseHandler(object):
                 res.headers.add(key, value)
 
             return res(environ, start_response)
-        except HTTPException, exc:
+        except HTTPException as exc:
             # HTTP exceptions are used to redirect the user
             return exc(environ, start_response)
         except Exception as e:

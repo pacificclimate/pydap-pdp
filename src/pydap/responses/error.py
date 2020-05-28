@@ -1,5 +1,5 @@
 from traceback import print_exception
-from StringIO import StringIO
+from io import StringIO
 
 from webob import Response
 

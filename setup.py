@@ -6,7 +6,7 @@ README = open(os.path.join(here, 'README.rst')).read()
 NEWS = open(os.path.join(here, 'NEWS.txt')).read()
 
 
-__version__ = '3.2.6'
+__version__ = '3.3.0'
 
 install_requires = [
     'Numpy',
@@ -36,7 +36,8 @@ setup(name='pydap_pdp',
     description="An implementation of the Data Access Protocol.",
     long_description=README + '\n\n' + NEWS,
     classifiers=[
-      # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 3"
     ],
     keywords='opendap dods dap science data',
     author='Roberto De Almeida',

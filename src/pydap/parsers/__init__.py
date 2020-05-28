@@ -1,5 +1,11 @@
 import re
-from urllib import quote, unquote
+import sys
+
+
+if sys.version_info[0] == 2:
+    from urllib import quote, unquote
+else:
+    from urllib.parse import quote, unquote
 
 
 def parse_projection(input):

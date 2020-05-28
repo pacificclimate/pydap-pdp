@@ -82,7 +82,7 @@ class DapServer(object):
                             path = req.path_info.lstrip('/').rsplit('.', 1)[0]
                             filepath = os.path.join(handler['dir'], path)
                             res = get_handler(filepath)
-                    except OpenFileError, e:
+                    except OpenFileError as e:
                         res = Response(status='404 Not Found', body=e.value)
                     break
             else:
